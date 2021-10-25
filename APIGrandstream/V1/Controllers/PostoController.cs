@@ -13,10 +13,8 @@ namespace APIGrandstream.V1.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     public class PostoController : ControllerBase
     {
-
-        private readonly IPostoDb _postoDb;
-            
-        public PostoController(IPostoDb postoDb, IMapper mapper)
+        private readonly IPostoDb _postoDb;            
+        public PostoController(IPostoDb postoDb)
         {
             _postoDb = postoDb;
            
