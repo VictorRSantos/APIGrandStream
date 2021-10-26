@@ -1,6 +1,7 @@
 ﻿using APIGrandstream.Models;
 using APIGrandstream.V1.Models;
 using Dapper;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -39,7 +40,7 @@ namespace APIGrandstream.Data.MSSQL
                             ORDER BY
                             A.Nome";
 
-            using (SqlConnection banco = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+            using (SqliteConnection banco = new SqliteConnection(_context.Database.GetDbConnection().ConnectionString))
             {
 
                 try
@@ -93,7 +94,7 @@ namespace APIGrandstream.Data.MSSQL
                             ORDER BY
                             A.Nome";
 
-            using (SqlConnection banco = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+            using (SqliteConnection banco = new SqliteConnection(_context.Database.GetDbConnection().ConnectionString))
             {
 
                 try
@@ -160,7 +161,7 @@ WHERE
 HoraFim IS NULL  AND EV.HoraInicio >  DATEADD(HOUR, -15, GETDATE())";
 
 
-            using (var banco = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
+            using (var banco = new SqliteConnection(_context.Database.GetDbConnection().ConnectionString))
             {
 
 

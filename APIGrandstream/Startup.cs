@@ -26,7 +26,8 @@ namespace APIGrandstream
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<GrandstreamContext>(contexto => contexto.UseSqlServer(Configuration.GetConnectionString("Default")));
+            //services.AddDbContext<GrandstreamContext>(contexto => contexto.UseSqlServer(Configuration.GetConnectionString("Default")));
+            services.AddDbContext<GrandstreamContext>(contexto => contexto.UseSqlite(Configuration.GetConnectionString("Default")));
 
             services.AddControllers().AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
