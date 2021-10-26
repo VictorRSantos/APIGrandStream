@@ -143,8 +143,7 @@ namespace APIGrandstream.Data.MSSQL
 	  ,BT.IdConfigEvento
 	  ,BT.Texto
 	  ,BT.Icone
-	  ,BT.Acao
-	  ,BT.Complemento
+	  ,BT.Acao	 
 	  ,CE.IdConfigEvento	   
       ,CE.Prioridade
       ,CE.Evento
