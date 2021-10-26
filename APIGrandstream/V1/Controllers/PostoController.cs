@@ -38,7 +38,7 @@ namespace APIGrandstream.V1.Controllers
             foreach (var item in andar.Leitos)
             {
                 var resultado = (await _postoDb.Posto_Eventos_ConfigEventos_Botoes()).Where(x => x.Local.ToUpper().Trim().Equals(item.Nome.ToUpper().Trim())).FirstOrDefault();
-
+                
                 item.Hora = resultado == null ? null : resultado.HoraInicio;
                 item.CorPainel = resultado == null ? "" : resultado.Botao.ConfigEventos.CorPainel;
                 item.CorTexto = resultado == null ? "" : resultado.Botao.ConfigEventos.CorTexto;
@@ -62,8 +62,9 @@ namespace APIGrandstream.V1.Controllers
                 Id = resultado == null ? null : resultado.Botao.Id,
                 Texto = resultado == null ? "" : resultado.Botao.Texto,
                 Icone = resultado == null ? "" : resultado.Botao.Icone,
-                Acao = resultado == null ? "" : resultado.Botao.Acao
-
+                Acao = resultado == null ? "" : resultado.Botao.Acao,
+                Complemento = resultado == null ? "" : resultado.Botao.Complemento
+                
             };
 
             return botao;

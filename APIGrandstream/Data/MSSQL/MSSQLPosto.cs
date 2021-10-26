@@ -1,7 +1,6 @@
 ﻿using APIGrandstream.Models;
 using APIGrandstream.V1.Models;
 using Dapper;
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -19,7 +18,6 @@ namespace APIGrandstream.Data.MSSQL
         {
             _context = context;
         }
-
 
         public async Task<List<Andares>> Posto_Andares_Locais()
         {
@@ -40,7 +38,7 @@ namespace APIGrandstream.Data.MSSQL
                             ORDER BY
                             A.Nome";
 
-            using (SqliteConnection banco = new SqliteConnection(_context.Database.GetDbConnection().ConnectionString))
+            using (SqlConnection banco = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
             {
 
                 try
@@ -94,7 +92,7 @@ namespace APIGrandstream.Data.MSSQL
                             ORDER BY
                             A.Nome";
 
-            using (SqliteConnection banco = new SqliteConnection(_context.Database.GetDbConnection().ConnectionString))
+            using (SqlConnection banco = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
             {
 
                 try
@@ -146,6 +144,7 @@ namespace APIGrandstream.Data.MSSQL
 	  ,BT.Texto
 	  ,BT.Icone
 	  ,BT.Acao
+	  ,BT.Complemento
 	  ,CE.IdConfigEvento	   
       ,CE.Prioridade
       ,CE.Evento
@@ -158,10 +157,15 @@ FROM Eventos EV
 JOIN ConfigEventos CE ON CE.Evento = EV.Tipo
 JOIN Botoes BT ON BT.IdConfigEvento = CE.IdConfigEvento
 WHERE
-HoraFim IS NULL  AND EV.HoraInicio >  DATEADD(HOUR, -15, GETDATE())";
+HoraFim IS NULL";
 
 
-            using (var banco = new SqliteConnection(_context.Database.GetDbConnection().ConnectionString))
+            /*WHERE
+                    HoraFim IS NULL  AND EV.HoraInicio >  DATEADD(HOUR, -15, GETDATE())
+             */
+
+
+            using (SqlConnection banco = new SqlConnection(_context.Database.GetDbConnection().ConnectionString))
             {
 
 

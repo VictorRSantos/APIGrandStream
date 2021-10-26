@@ -26,8 +26,8 @@ namespace APIGrandstream
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<GrandstreamContext>(contexto => contexto.UseSqlServer(Configuration.GetConnectionString("Default")));
-            services.AddDbContext<GrandstreamContext>(contexto => contexto.UseSqlite(Configuration.GetConnectionString("Default")));
+           services.AddDbContext<GrandstreamContext>(contexto => contexto.UseSqlServer(Configuration.GetConnectionString("Default")));
+           
 
             services.AddControllers().AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
@@ -35,12 +35,12 @@ namespace APIGrandstream
 
             DependencyInjection(services);
 
-            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
-            {
-                builder.AllowAnyOrigin()
-                       .WithMethods("GET", "POST", "PUT", "DELETE")
-                       .AllowAnyHeader();
-            }));
+            //services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            //{
+            //    builder.AllowAnyOrigin()
+            //           .WithMethods("GET", "POST", "PUT", "DELETE")
+            //           .AllowAnyHeader();
+            //}));
 
             services.AddVersionedApiExplorer(option =>
             {
@@ -91,8 +91,9 @@ namespace APIGrandstream
             {
                 foreach (var description in apiVersionDescription.ApiVersionDescriptions)
                 {
-                    options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
-                    options.RoutePrefix = "";
+                    options.RoutePrefix = "swagger";
+                    options.SwaggerEndpoint($"/apigrandstream/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
+                    options.DocumentTitle = "API Eritel Grandstream";
                 }
             });
 
