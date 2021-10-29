@@ -1,6 +1,8 @@
 using APIGrandstream.Data;
 using APIGrandstream.Data.Interface;
 using APIGrandstream.Data.MSSQL;
+using APIGrandstream.Data.MYSQL;
+using APIGrandstream.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using System;
 
@@ -27,7 +30,11 @@ namespace APIGrandstream
         public void ConfigureServices(IServiceCollection services)
         {
            services.AddDbContext<GrandstreamContext>(contexto => contexto.UseSqlServer(Configuration.GetConnectionString("Default")));
-           
+
+
+            var configuracao = new Configuracao();
+            new ConfigureFromConfigurationOptions<Configuracao>(Configuration.GetSection("Configuracao")).Configure(configuracao);
+            services.AddSingleton(configuracao);
 
             services.AddControllers().AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
@@ -108,6 +115,7 @@ namespace APIGrandstream
         private static void DependencyInjection(IServiceCollection services)
         {
             services.AddScoped<IPostoDb, MSSQLPosto>();
+            //services.AddScoped<IPostoDb, MYSQLPosto>();
            
         }
     }

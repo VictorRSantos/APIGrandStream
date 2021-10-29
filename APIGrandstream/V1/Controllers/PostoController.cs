@@ -1,4 +1,5 @@
 ﻿using APIGrandstream.Data;
+using APIGrandstream.Data.Factories;
 using APIGrandstream.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,10 +14,11 @@ namespace APIGrandstream.V1.Controllers
     public class PostoController : ControllerBase
     {
         private readonly IPostoDb _postoDb;
-        public PostoController(IPostoDb postoDb)
+        
+        public PostoController(IPostoDb postoDb, Configuracao configuracao, GrandstreamContext context)
         {
             _postoDb = postoDb;
-
+            _postoDb = PostoFactoryDb.GetPostoDb(configuracao, context);
         }
 
       
