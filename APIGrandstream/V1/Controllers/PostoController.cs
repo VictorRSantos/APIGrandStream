@@ -1,9 +1,7 @@
 ﻿using APIGrandstream.Data;
 using APIGrandstream.Models;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,6 +19,7 @@ namespace APIGrandstream.V1.Controllers
 
         }
 
+      
         [HttpGet("{console}")]
         public async Task<IActionResult> Get(string console)
         {
@@ -93,6 +92,14 @@ namespace APIGrandstream.V1.Controllers
 
 
             return Ok(andar);
+        }
+
+        [HttpPost]//Console, Acao, Leito
+        public async Task<IActionResult> Post([FromBody] EnviarAcao enviarAcao)
+        {
+            
+
+            return Ok(enviarAcao);
         }
 
         private Dtos.Botao ConvertBotoesNull(int ramal)

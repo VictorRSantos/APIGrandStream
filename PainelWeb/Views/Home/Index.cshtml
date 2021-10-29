@@ -1,0 +1,48 @@
+﻿@model PainelWeb.Models.PainelViewModel
+
+@{
+    ViewData["Title"] = "Painel Telecare";
+  
+}
+
+<form asp-action="SalvarEventos" asp-controller="Home" method="post">
+
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            @foreach (var item in Model.Leitos)
+            {
+                <div class="card text-dark bg-light mb-3 m-lg-2" style="max-width: 37rem;">
+                    <div class="card-header">
+                        <label class="mb-4 text-uppercase fw-bold">@item.Nome</label>
+                        <div class="text-center">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th><button class="btn btn-sm btn-info" type="submit" name="evento" value="CH Paciente" asp-action="Paciente" asp-route-local="@item.Nome">Paciente</button></th>
+                                        <th><button class="btn btn-sm btn-info" type="submit" name="evento" value="CH Auxilio" asp-action="Auxilio" asp-route-local="@item.Nome">Auxilio</button></th>
+                                        <th><button class="btn btn-sm btn-info" type="submit" name="evento" value="CH Azul" asp-action="CodigoAzul" asp-route-local="@item.Nome">Cod.Azul</button></th>
+                                        <th><button class="btn btn-sm btn-info" type="submit" name="evento" value="Ch Toilete" asp-action="Banheiro" asp-route-local="@item.Nome">Banheiro</button></th>
+                                        <th><button class="btn btn-sm btn-info" type="submit" name="evento" value="Presenca1" asp-action="Presenca1" asp-route-local="@item.Nome">Presença1</button></th>
+                                        <th><button class="btn btn-sm btn-info" type="submit" name="evento" value="Presenca2" asp-action="Presenca2" asp-route-local="@item.Nome">Presença2</button></th>
+                                        <th><button class="btn btn-sm btn-danger" type="submit" name="evento" value="Cancelar" asp-action="Cancelar" asp-route-local="@item.Nome">Cancelar </button></th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        @foreach (var evento in item.ListaDeEventos)
+                        {
+
+                            <div>
+                                @(string.IsNullOrEmpty(evento.Usuario) ? evento.TextoEvento : evento.Usuario)
+                            </div>
+
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+</form>
