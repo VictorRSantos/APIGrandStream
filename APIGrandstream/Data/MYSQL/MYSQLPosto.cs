@@ -85,7 +85,7 @@ namespace APIGrandstream.Data.MYSQL
                             FROM Locations LC
                             JOIN Andares A ON A.Id = LC.IdAndar
                             WHERE
-                            a.Console = '{console}'
+                            A.Console = '{console}'
                             ORDER BY
                             A.Nome";
 

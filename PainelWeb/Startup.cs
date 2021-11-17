@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using PainelWeb.Data;
 using PainelWeb.Data.Interface;
 using PainelWeb.Data.MSSQL;
+using PainelWeb.Data.MYSQL;
 using PainelWeb.Models;
 
 namespace PainelWeb
@@ -38,6 +39,7 @@ namespace PainelWeb
         private static void InjecaoDeDependecia(IServiceCollection services)
         {
             services.AddScoped<IEventoDb, MSSQLEventos>();
+            services.AddScoped<IEventoDb, MYSQLEventos>();
             services.AddScoped<IPainelViewModel, PainelViewModel>();
         }
 

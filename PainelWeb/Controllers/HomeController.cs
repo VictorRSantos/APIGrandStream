@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PainelWeb.Data;
+using PainelWeb.Data.Factory;
 using PainelWeb.Data.Interface;
 using PainelWeb.Models;
 using System.Linq;
@@ -9,11 +11,13 @@ namespace PainelWeb.Controllers
     {
 
         private IPainelViewModel _painelViewModel;
+        private IEventoDb _evento;
         Evento eventoAtual;
 
-        public HomeController(IPainelViewModel painelViewModel)
+        public HomeController(IPainelViewModel painelViewModel, IEventoDb eventoDb, ConexaoBanco conexaoBanco)
         {
-
+            _evento = eventoDb;
+            _evento = EventosFactoryDb.GetEventoDb(conexaoBanco);
             _painelViewModel = painelViewModel;
             eventoAtual = new Evento();
         }
