@@ -1,8 +1,10 @@
 ﻿using APIGrandstream.Data;
 using APIGrandstream.Data.Factories;
+using APIGrandstream.Enums;
 using APIGrandstream.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,7 +16,8 @@ namespace APIGrandstream.V1.Controllers
     public class PostoController : ControllerBase
     {
         private readonly IPostoDb _postoDb;
-        
+        Andar andar = new Andar();
+        List<Dtos.Eventos> eventos = new List<Dtos.Eventos>();
         public PostoController(IPostoDb postoDb, Configuracao configuracao, GrandstreamContext context)
         {
             _postoDb = postoDb;
@@ -25,7 +28,7 @@ namespace APIGrandstream.V1.Controllers
         [HttpGet("{console}")]
         public async Task<IActionResult> Get(string console)
         {
-            Andar andar = new Andar();
+            
 
 
             var posto_Andares_Locais_Por_Console = await _postoDb.Posto_Andares_Locais_Por_Console(console);
@@ -33,8 +36,12 @@ namespace APIGrandstream.V1.Controllers
             foreach (var item in posto_Andares_Locais_Por_Console)
             {
                 andar.Console = item.Console;
+                andar.NomePosto = item.Nome;
 
                 andar.Leitos.Add(ConverterLista(item.Locations));
+
+
+
             }
 
             var listaEvento = (await _postoDb.Posto_Eventos_ConfigEventos_Botoes());
@@ -63,6 +70,7 @@ namespace APIGrandstream.V1.Controllers
                             idEvento = dto.Id;
 
                             item.Eventos.Add(ConvertEventos(dto));
+                            eventos.Add(ConvertEventos(dto));
                         }
 
 
@@ -93,8 +101,36 @@ namespace APIGrandstream.V1.Controllers
             };
 
 
+
+            if (eventos.Any(x => x.TextoEvento.ToUpper().Trim() == "CH Azul".ToUpper().Trim()))
+            {
+                andar.Led = (int)TiposDeLedsPorEvento.VermelhoContinuo;
+                andar.Audio = "4.wav";
+            }else if (eventos.Any(x => x.TextoEvento.ToUpper().Trim() != "CH Azul".ToUpper().Trim() && x.TextoEvento.ToUpper().Trim() != "Artur".ToUpper().Trim() && x.TextoEvento.ToUpper().Trim() != "Hugo".ToUpper().Trim()))
+            {
+                andar.Led = (int)TiposDeLedsPorEvento.VermelhoPiscando;
+                andar.Audio = "3.wav";
+            }else if (eventos.Any(x => x.TextoEvento.ToUpper().Trim() == "Artur".ToUpper().Trim() || x.TextoEvento.ToUpper().Trim() == "Hugo".ToUpper().Trim()))
+            {
+                andar.Led = (int)TiposDeLedsPorEvento.VerdePiscando;
+                andar.Audio = "1.wav";
+            }
+            else
+            {
+                andar.Led = (int)TiposDeLedsPorEvento.Nada;
+            }
+
+        
+
+         
+
+
+
+
             return Ok(andar);
         }
+
+       
 
         [HttpPost]//Console, Acao, Leito
         public async Task<IActionResult> Post([FromBody] EnviarAcao enviarAcao)
@@ -139,13 +175,15 @@ namespace APIGrandstream.V1.Controllers
 
         private Dtos.Eventos ConvertEventos(Eventos resultado)
         {
-
+            
             Dtos.Eventos dto = new Dtos.Eventos()
             {
 
                 TextoEvento = resultado == null ? null : resultado.Usuario == null ? resultado.TextoEvento : resultado.Usuario,
                 Icone = resultado == null ? null : resultado.Botao.ConfigEventos.Icone
             };
+
+           
 
             return dto;
         }

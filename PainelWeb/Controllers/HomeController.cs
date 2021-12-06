@@ -14,9 +14,9 @@ namespace PainelWeb.Controllers
         private IEventoDb _evento;
         Evento eventoAtual;
 
-        public HomeController(IPainelViewModel painelViewModel, IEventoDb eventoDb, ConexaoBanco conexaoBanco)
+        public HomeController(IPainelViewModel painelViewModel,ConexaoBanco conexaoBanco)
         {
-            _evento = eventoDb;
+            
             _evento = EventosFactoryDb.GetEventoDb(conexaoBanco);
             _painelViewModel = painelViewModel;
             eventoAtual = new Evento();
@@ -24,8 +24,8 @@ namespace PainelWeb.Controllers
 
         public IActionResult Index()
         {
-            _painelViewModel.Leitos = _painelViewModel.ListaDeLocaisAndares();
-
+            
+            _painelViewModel.Leitos = _evento.ListaDeLocaisAndares();
 
             return View(_painelViewModel);
         }
@@ -38,7 +38,7 @@ namespace PainelWeb.Controllers
             eventoAtual = Resultado(local);
 
 
-            _painelViewModel.SalvarEventos(eventoAtual, evento);
+            _evento.SalvarEventos(eventoAtual, evento);
 
 
             return RedirectToAction("Index");
@@ -50,7 +50,7 @@ namespace PainelWeb.Controllers
         public IActionResult Auxilio(string local, string evento)
         {
             eventoAtual = Resultado(local);
-            _painelViewModel.SalvarEventos(eventoAtual, evento);
+            _evento.SalvarEventos(eventoAtual, evento);
             return RedirectToAction("Index");
         }
 
@@ -59,7 +59,7 @@ namespace PainelWeb.Controllers
         public IActionResult CodigoAzul(string local, string evento)
         {
             eventoAtual = Resultado(local);
-            _painelViewModel.SalvarEventos(eventoAtual, evento);
+            _evento.SalvarEventos(eventoAtual, evento);
             return RedirectToAction("Index");
         }
 
@@ -67,7 +67,7 @@ namespace PainelWeb.Controllers
         public IActionResult Banheiro(string local, string evento)
         {
             eventoAtual = Resultado(local);
-            _painelViewModel.SalvarEventos(eventoAtual, evento);
+            _evento.SalvarEventos(eventoAtual, evento);
             return RedirectToAction("Index");
         }
 
@@ -77,7 +77,7 @@ namespace PainelWeb.Controllers
             eventoAtual = Resultado(local);
             eventoAtual.Usuario = "Artur";
 
-            _painelViewModel.PresencaEventos(eventoAtual, evento);
+            _evento.PresencaEventos(eventoAtual, evento);
 
             return RedirectToAction("Index");
         }
@@ -87,7 +87,7 @@ namespace PainelWeb.Controllers
         {
             eventoAtual = Resultado(local);
             eventoAtual.Usuario = "Hugo";
-            _painelViewModel.PresencaEventos(eventoAtual, evento);
+            _evento.PresencaEventos(eventoAtual, evento);
 
             return RedirectToAction("Index");
         }
@@ -95,7 +95,7 @@ namespace PainelWeb.Controllers
         [HttpPost]
         public IActionResult Cancelar(string local, string evento)
         {
-            _painelViewModel.Cancelar(local);
+            _evento.Cancelar(local);
 
             return RedirectToAction("Index");
         }
@@ -105,7 +105,7 @@ namespace PainelWeb.Controllers
         {
 
 
-            var resultado = _painelViewModel.ListaDeLocaisAndares().Where(x => x.Nome == local).FirstOrDefault();
+            var resultado = _evento.ListaDeLocaisAndares().Where(x => x.Nome == local).FirstOrDefault();
 
             var evento = resultado.ListaDeEventos.OrderByDescending(x => x.HoraInicio).FirstOrDefault(x => x.Local == local);
 
