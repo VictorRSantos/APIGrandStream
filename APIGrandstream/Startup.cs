@@ -100,14 +100,14 @@ namespace APIGrandstream
             {
                 foreach (var description in apiVersionDescription.ApiVersionDescriptions)
                 {
-                    options.RoutePrefix = "swagger";
-                    options.SwaggerEndpoint($"/ApiGrandStream/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
-                    options.DocumentTitle = "API Eritel Grandstream";
-
-
-                    //options.RoutePrefix = "";
-                    //options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
+                    //options.RoutePrefix = "swagger";
+                    //options.SwaggerEndpoint($"/ApiGrandStream/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
                     //options.DocumentTitle = "API Eritel Grandstream";
+
+
+                    options.RoutePrefix = "";
+                    options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
+                    options.DocumentTitle = "API Eritel Grandstream";
                 }
             });
 
