@@ -14,6 +14,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using System;
+using System.Net.WebSockets;
+using System.Threading.Tasks;
 
 namespace APIGrandstream
 {
@@ -98,13 +100,19 @@ namespace APIGrandstream
             {
                 foreach (var description in apiVersionDescription.ApiVersionDescriptions)
                 {
-                    options.RoutePrefix = "";
-                    options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
+                    options.RoutePrefix = "swagger";
+                    options.SwaggerEndpoint($"/ApiGrandStream/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
                     options.DocumentTitle = "API Eritel Grandstream";
+
+
+                    //options.RoutePrefix = "";
+                    //options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName.ToUpperInvariant());
+                    //options.DocumentTitle = "API Eritel Grandstream";
                 }
             });
 
 
+          
 
             app.UseEndpoints(endpoints =>
             {

@@ -5,6 +5,7 @@ using APIGrandstream.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -24,11 +25,12 @@ namespace APIGrandstream.V1.Controllers
             _postoDb = PostoFactoryDb.GetPostoDb(configuracao, context);
         }
 
-      
+
         [HttpGet("{console}")]
         public async Task<IActionResult> Get(string console)
         {
-            
+
+            var scheme = HttpContext.Request.Scheme;
 
 
             var posto_Andares_Locais_Por_Console = await _postoDb.Posto_Andares_Locais_Por_Console(console);
@@ -45,6 +47,7 @@ namespace APIGrandstream.V1.Controllers
             }
 
             var listaEvento = (await _postoDb.Posto_Eventos_ConfigEventos_Botoes());
+
             var listaBotao = await _postoDb.Posto_Eventos_ConfigEventos_Botoes();
 
             foreach (var item in andar.Leitos)
@@ -100,29 +103,50 @@ namespace APIGrandstream.V1.Controllers
 
             };
 
-
-
             if (eventos.Any(x => x.TextoEvento.ToUpper().Trim() == "CH Azul".ToUpper().Trim()))
             {
                 andar.Led = (int)TiposDeLedsPorEvento.VermelhoContinuo;
-                andar.Audio = "4.wav";
-            }else if (eventos.Any(x => x.TextoEvento.ToUpper().Trim() != "CH Azul".ToUpper().Trim() && x.TextoEvento.ToUpper().Trim() != "Artur".ToUpper().Trim() && x.TextoEvento.ToUpper().Trim() != "Hugo".ToUpper().Trim()))
+
+                var enderecoArquivo = "/audio4.mp3";
+
+                var url = HttpContext.Request.Host.ToUriComponent();
+
+
+                andar.Audio = $"{scheme}://{url}{enderecoArquivo}";
+
+
+            }
+            else if (eventos.Any(x => x.TextoEvento.ToUpper().Trim() != "CH Azul".ToUpper().Trim() && x.TextoEvento.ToUpper().Trim() != "Artur".ToUpper().Trim() && x.TextoEvento.ToUpper().Trim() != "Hugo".ToUpper().Trim()))
             {
                 andar.Led = (int)TiposDeLedsPorEvento.VermelhoPiscando;
-                andar.Audio = "3.wav";
-            }else if (eventos.Any(x => x.TextoEvento.ToUpper().Trim() == "Artur".ToUpper().Trim() || x.TextoEvento.ToUpper().Trim() == "Hugo".ToUpper().Trim()))
+
+                var enderecoArquivo = "/audio3.mp3";
+
+                var url = HttpContext.Request.Host.ToUriComponent();
+
+                andar.Audio = $"{scheme}://{url}{enderecoArquivo}";
+
+
+            }
+            else if (eventos.Any(x => x.TextoEvento.ToUpper().Trim() == "Artur".ToUpper().Trim() || x.TextoEvento.ToUpper().Trim() == "Hugo".ToUpper().Trim()))
             {
                 andar.Led = (int)TiposDeLedsPorEvento.VerdePiscando;
-                andar.Audio = "1.wav";
+
+
+                var enderecoArquivo = "/audio1.mp3";
+
+                var url = HttpContext.Request.Host.ToUriComponent();
+
+                andar.Audio = $"{scheme}://{url}{enderecoArquivo}";
             }
             else
             {
                 andar.Led = (int)TiposDeLedsPorEvento.Nada;
             }
 
-        
 
-         
+
+
 
 
 
@@ -130,12 +154,12 @@ namespace APIGrandstream.V1.Controllers
             return Ok(andar);
         }
 
-       
+
 
         [HttpPost]//Console, Acao, Leito
         public async Task<IActionResult> Post([FromBody] EnviarAcao enviarAcao)
         {
-            
+
 
             return Ok(enviarAcao);
         }
@@ -154,7 +178,7 @@ namespace APIGrandstream.V1.Controllers
 
             return btn;
         }
-                
+
         private Dtos.Botao ConvertBotoes(Eventos resultado, int ramal)
         {
 
@@ -175,7 +199,7 @@ namespace APIGrandstream.V1.Controllers
 
         private Dtos.Eventos ConvertEventos(Eventos resultado)
         {
-            
+
             Dtos.Eventos dto = new Dtos.Eventos()
             {
 
@@ -183,7 +207,7 @@ namespace APIGrandstream.V1.Controllers
                 Icone = resultado == null ? null : resultado.Botao.ConfigEventos.Icone
             };
 
-           
+
 
             return dto;
         }

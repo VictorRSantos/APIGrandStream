@@ -260,7 +260,7 @@ HoraFim IS NULL";
         public bool SalvarEventos(Evento evento, string eventoSelecionado)
         {
             var sqlUpdate = $@"UPDATE Eventos SET HoraFim = GETDATE() WHERE HoraFim IS NULL AND Local = @Local";
-
+            
             var sqlInsert = $@"INSERT INTO EVENTOS (IdElise, HoraInicio, Dispositivo, Local, TextoEvento, HoraInsert, Tipo)
                                VALUES
                                (1, GetDate(), 1, @Local, @TextoEvento, GetDate(), @Tipo)";
@@ -274,7 +274,7 @@ HoraFim IS NULL";
                     if (evento != null)
                     {
                         var resultadoUpdate = banco.Execute(sqlUpdate, new { Local = evento.Local});
-
+                        
                     }
 
 

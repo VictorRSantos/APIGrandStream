@@ -45,7 +45,6 @@ namespace PainelWeb.Controllers
         }
 
 
-
         [HttpPost]
         public IActionResult Auxilio(string local, string evento)
         {

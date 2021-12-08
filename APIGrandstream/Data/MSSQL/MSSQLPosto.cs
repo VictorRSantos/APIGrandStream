@@ -153,8 +153,8 @@ namespace APIGrandstream.Data.MSSQL
       ,CE.Icone
       ,CE.Som
 FROM Eventos EV
-JOIN ConfigEventos CE ON CE.Evento = EV.Tipo
-JOIN Botoes BT ON BT.IdConfigEvento = CE.IdConfigEvento
+LEFT JOIN ConfigEventos CE ON CE.Evento = EV.Tipo
+LEFT JOIN Botoes BT ON BT.IdConfigEvento = CE.IdConfigEvento
 WHERE
 HoraFim IS NULL";
 
